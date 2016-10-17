@@ -1,4 +1,6 @@
 angular.module('angular-img-cropper', []).directive("imageCropper", ['$document', '$window', 'imageCropperDataShare', function ($document, $window, imageCropperDataShare) {
+    var $ = $ || angular.element;
+
     return {
         scope: {
             image: "=",
@@ -6,6 +8,8 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
             cropWidth: "=",
             cropHeight: "=",
             keepAspect: "=",
+            cropRatio: "=?",
+            cropColor: "=?",
             touchRadius: "=",
             cropAreaBounds: "=",
             minWidth: "=",
@@ -159,7 +163,7 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                         ctx.lineTo(p.x + this.position.x, p.y + this.position.y);
                     }
                     ctx.closePath();
-                    ctx.fillStyle = 'rgba(255,228,0,1)';
+                    ctx.fillStyle = scope.cropColor;
                     ctx.fill();
                 };
                 DragMarker.prototype.recalculatePosition = function (bounds) {
@@ -197,7 +201,8 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     ctx.lineTo(this.position.x, this.position.y);
                     ctx.closePath();
                     ctx.lineWidth = 2;
-                    ctx.strokeStyle = 'rgba(255,228,0,1)';
+                    ctx.setLineDash([0, 0]);
+                    ctx.strokeStyle = scope.cropColor;
                     ctx.stroke();
                 };
                 CornerMarker.prototype.drawCornerFill = function (ctx) {
@@ -213,15 +218,15 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     if (this.verticalNeighbour.position.y < this.position.y) {
                         vDirection = -1;
                     }
-                    ctx.beginPath();
-                    ctx.moveTo(this.position.x, this.position.y);
-                    ctx.lineTo(this.position.x + (sideLength * hDirection), this.position.y);
-                    ctx.lineTo(this.position.x + (sideLength * hDirection), this.position.y + (sideLength * vDirection));
-                    ctx.lineTo(this.position.x, this.position.y + (sideLength * vDirection));
-                    ctx.lineTo(this.position.x, this.position.y);
-                    ctx.closePath();
-                    ctx.fillStyle = 'rgba(0,0,0,1)';
-                    ctx.fill();
+                    /*ctx.beginPath();
+                     ctx.moveTo(this.position.x, this.position.y);
+                     ctx.lineTo(this.position.x + (sideLength * hDirection), this.position.y);
+                     ctx.lineTo(this.position.x + (sideLength * hDirection), this.position.y + (sideLength * vDirection));
+                     ctx.lineTo(this.position.x, this.position.y + (sideLength * vDirection));
+                     ctx.lineTo(this.position.x, this.position.y);
+                     ctx.closePath();
+                     ctx.fillStyle = 'rgba(0,0,0,1)';
+                     ctx.fill();*/
                 };
                 CornerMarker.prototype.moveX = function (x) {
                     this.setPosition(x, this.position.y);
@@ -325,24 +330,30 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                 return CropTouch;
             })();
             var ImageCropper = (function () {
-                function ImageCropper(canvas, x, y, width, height, keepAspect, touchRadius) {
+                function ImageCropper(canvas, x, y, width, height, keepAspect, cropRatio, touchRadius) {
                     if (x === void 0) {
                         x = 0;
                     }
                     if (y === void 0) {
                         y = 0;
                     }
-                    if (width === void 0) {
-                        width = 100;
-                    }
-                    if (height === void 0) {
-                        height = 50;
-                    }
                     if (keepAspect === void 0) {
                         keepAspect = true;
                     }
                     if (touchRadius === void 0) {
                         touchRadius = 20;
+                    }
+                    if (width === void 0) {
+                        width = canvas.width;
+                    }
+                    if (height === void 0) {
+                        height = canvas.height;
+                    }
+                    if (cropRatio) {
+                        keepAspect = true;
+                        height = width * cropRatio;
+                        x = (canvas.width - width) / 2;
+                        y = (canvas.height - height) / 2;
                     }
                     this.keepAspect = false;
                     this.aspectRatio = 0;
@@ -380,18 +391,31 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     this.croppedImage = new Image();
                     this.currentlyInteracting = false;
 
-                    angular.element(window)
-                        .off('mousemove.angular-img-cropper mouseup.angular-img-cropper touchmove.angular-img-cropper touchend.angular-img-cropper')
-                        .on('mousemove.angular-img-cropper', this.onMouseMove.bind(this))
-                        .on('mouseup.angular-img-cropper', this.onMouseUp.bind(this))
-                        .on('touchmove.angular-img-cropper', this.onTouchMove.bind(this))
-                        .on('touchend.angular-img-cropper', this.onTouchEnd.bind(this));
-
                     angular.element(canvas)
-                        .off('mousedown.angular-img-cropper touchstart.angular-img-cropper')
-                        .on('mousedown.angular-img-cropper', this.onMouseDown.bind(this))
-                        .on('touchstart.angular-img-cropper', this.onTouchStart.bind(this));
+                        .off('mousedown.drooms touchstart.drooms')
+                        .on('mousedown.drooms', this.onMouseDown.bind(this))
+                        .on('mousemove.drooms', this.onMouseMove.bind(this))
+                        .on('touchstart.drooms', this.onTouchStart.bind(this));
                 }
+
+                ImageCropper.prototype.onWindowEvents = function () {
+                    angular.element(this.canvas).off('mousemove.drooms');
+                    angular.element(window)
+                        .off('mousemove.drooms mouseup.drooms touchmove.drooms touchend.drooms')
+                        .on('mousemove.drooms', this.onMouseMove.bind(this))
+                        .on('mouseup.drooms', this.onMouseUp.bind(this))
+                        .on('touchmove.drooms', this.onTouchMove.bind(this))
+                        .on('touchend.drooms', this.onTouchEnd.bind(this));
+                };
+
+                ImageCropper.prototype.offWindowEvents = function () {
+                    imageCropperDataShare.setStyle(this.canvas, 'initial');
+
+                    angular.element(this.canvas)
+                        .on('mousemove.drooms', this.onMouseMove.bind(this));
+                    angular.element(window)
+                        .off('mousemove.drooms mouseup.drooms touchmove.drooms touchend.drooms');
+                };
 
                 ImageCropper.prototype.resizeCanvas = function (width, height) {
                     this.canvas.width = width;
@@ -435,7 +459,8 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                         }
                         this.center.draw(ctx);
                         ctx.lineWidth = 2;
-                        ctx.strokeStyle = 'rgba(255,228,0,1)';
+                        ctx.setLineDash([5, 5]);
+                        ctx.strokeStyle = scope.cropColor;
                         ctx.strokeRect(bounds.left, bounds.top, bounds.getWidth(), bounds.getHeight());
                     }
                     else {
@@ -833,8 +858,10 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                 ImageCropper.prototype.getCropBounds = function () {
                     var h = this.canvas.height - (this.minYClamp * 2);
                     var bounds = this.getBounds();
-                    bounds.top = Math.round((h - bounds.top + this.minYClamp) / this.ratioH);
-                    bounds.bottom = Math.round((h - bounds.bottom + this.minYClamp) / this.ratioH);
+                    bounds.top = Math.round((bounds.top - this.minYClamp) / this.ratioH);
+                    bounds.bottom = Math.round((bounds.bottom - this.minYClamp) / this.ratioH);
+                    // bounds.top = Math.round((h - bounds.top + this.minYClamp) / this.ratioH);
+                    // bounds.bottom = Math.round((h - bounds.bottom + this.minYClamp) / this.ratioH);
                     bounds.left = Math.round((bounds.left - this.minXClamp) / this.ratioW);
                     bounds.right = Math.round((bounds.right - this.minXClamp) / this.ratioW);
                     return bounds;
@@ -956,7 +983,7 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
 
                         this.center.setPosition(bounds.left+bounds.getWidth()/2, bounds.top+bounds.getHeight()/2);
                     }*/
-                    
+
                     this.vertSquashRatio = this.detectVerticalSquash(this.srcImage);
                     this.draw(this.ctx);
                     var croppedImg = this.getCroppedImage(scope.cropWidth, scope.cropHeight);
@@ -1193,6 +1220,7 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     }
                 };
                 ImageCropper.prototype.onTouchEnd = function (e) {
+                    this.offWindowEvents();
                     if (crop.isImageSet()) {
                         for (var i = 0; i < e.changedTouches.length; i++) {
                             var touch = e.changedTouches[i];
@@ -1254,11 +1282,13 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     return (ratio === 0) ? 1 : ratio;
                 };
                 ImageCropper.prototype.onMouseDown = function (e) {
+                    this.onWindowEvents();
                     if (crop.isImageSet()) {
                         this.isMouseDown = true;
                     }
                 };
                 ImageCropper.prototype.onMouseUp = function (e) {
+                    this.offWindowEvents();
                     if (crop.isImageSet()) {
                         imageCropperDataShare.setReleased(this.canvas);
                         this.isMouseDown = false;
@@ -1279,44 +1309,47 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
             })();
 
             function setup(newValue, oldValue) {
-              if(crop && newValue === oldValue) {
-                return;
-              }
+                if(crop && newValue === oldValue) {
+                    return;
+                }
 
-              var canvas = element[0];
-              var width = scope.cropWidth;
-              var height = scope.cropHeight;
-              var keepAspect = scope.keepAspect;
-              var touchRadius = scope.touchRadius;
-              var oldImage = crop && crop.srcImage;
+                var canvas = element[0];
+                var width = scope.cropWidth;
+                var height = scope.cropHeight;
+                var keepAspect = scope.keepAspect;
+                var cropRatio = scope.cropRatio;
+                var touchRadius = scope.touchRadius;
+                var oldImage = crop && crop.srcImage;
 
-              crop = new ImageCropper(canvas, canvas.width / 2 - width / 2, canvas.height / 2 - height / 2, width, height, keepAspect, touchRadius);
+                scope.cropColor = scope.cropColor ||  'rgba(255,228,0,1)';
 
-              $(canvas).data('crop.angular-img-cropper', crop);
+                crop = new ImageCropper(canvas, width ? canvas.width / 2 - width / 2 : 0, height ? canvas.height / 2 - height / 2 : 0, width || canvas.width, height || canvas.height, keepAspect, cropRatio, touchRadius);
+                
+                $(canvas).data('crop.angular-img-cropper', crop);
 
-              if(oldImage) {
-                crop.setImage(oldImage);
-              } else {
-                load(scope.image);
-              }
+                if(oldImage) {
+                    crop.setImage(oldImage);
+                } else {
+                    load(scope.image);
+                }
             }
 
             function load(newValue) {
-              if (!newValue) {
-                return;
-              }
+                if (!newValue) {
+                    return;
+                }
 
-              var imageObj = new Image();
+                var imageObj = new Image();
 
-              if(attrs.cors !== undefined && attrs.cors !== "no") {
-                imageObj.crossOrigin = "Anonymous";
-              }
+                if(attrs.cors !== undefined && attrs.cors !== "no") {
+                    imageObj.crossOrigin = "Anonymous";
+                }
 
-              imageObj.addEventListener("load", function () {
-                crop.setImage(imageObj);
-                scope.$apply();
-              }, false);
-              imageObj.src = newValue;
+                imageObj.addEventListener("load", function () {
+                    crop.setImage(imageObj);
+                    scope.$apply();
+                }, false);
+                imageObj.src = newValue;
             }
 
             scope.$watch('cropWidth', setup);
