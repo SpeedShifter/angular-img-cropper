@@ -1227,6 +1227,8 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     ctx.drawImage(img, sx * this.vertSquashRatio, sy * this.vertSquashRatio, sw * this.vertSquashRatio, sh * this.vertSquashRatio, dx, dy, dw, dh);
                 };
                 ImageCropper.prototype.detectVerticalSquash = function (img) {
+                    // solution doesn't work with transparent icons, which is pretty often for desktop clients
+                    return 1;
                     var iw = img.naturalWidth, ih = img.naturalHeight;
                     var canvas = document.createElement('canvas');
                     canvas.width = 1;
