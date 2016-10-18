@@ -870,8 +870,6 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     var bounds = this.getBounds();
                     bounds.top = Math.round((bounds.top - this.minYClamp) / this.ratioH);
                     bounds.bottom = Math.round((bounds.bottom - this.minYClamp) / this.ratioH);
-                    // bounds.top = Math.round((h - bounds.top + this.minYClamp) / this.ratioH);
-                    // bounds.bottom = Math.round((h - bounds.bottom + this.minYClamp) / this.ratioH);
                     bounds.left = Math.round((bounds.left - this.minXClamp) / this.ratioW);
                     bounds.right = Math.round((bounds.right - this.minXClamp) / this.ratioW);
                     return bounds;
@@ -996,10 +994,6 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     else {
                         this.cropCanvas.width = Math.max(bounds.getWidth(), 1);
                         this.cropCanvas.height = Math.max(bounds.getHeight(), 1);
-                        // bufferedCtx = this.buffer.getContext('2d');
-                        // bufferedCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-                        // this.drawImageIOSFix(this.buffer.getContext('2d'), this.srcImage, Math.max(Math.round((bounds.left) / this.ratioW - offsetW), 0), Math.max(Math.round(bounds.top / this.ratioH - offsetH), 0), Math.max(Math.round(bounds.getWidth() / this.ratioW), 1), Math.max(Math.round(bounds.getHeight() / this.ratioH), 1), 0, 0, fillWidth, fillHeight);
-
                         this.cropCanvas.getContext('2d').drawImage(this.buffer, bounds.left, bounds.top, Math.max(bounds.getWidth(), 1), Math.max(bounds.getHeight(), 1), 0, 0, bounds.getWidth(), bounds.getHeight());
                         this.croppedImage.width = this.cropCanvas.width;
                         this.croppedImage.height = this.cropCanvas.height;
