@@ -442,10 +442,14 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                         }
                         this.ratioW = w / this.srcImage.width;
                         this.ratioH = h / this.srcImage.height;
+                        ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+
                         if (canvasAspect < sourceAspect) {
+                            ctx.fillRect(this.buffer.width / 2 - w / 2, 0, w, h);
                             this.drawImageIOSFix(ctx, this.srcImage, 0, 0, this.srcImage.width, this.srcImage.height, this.buffer.width / 2 - w / 2, 0, w, h);
                         }
                         else {
+                            ctx.fillRect(0, this.buffer.height / 2 - h / 2, w, h);
                             this.drawImageIOSFix(ctx, this.srcImage, 0, 0, this.srcImage.width, this.srcImage.height, 0, this.buffer.height / 2 - h / 2, w, h);
                         }
                         this.buffer.getContext('2d').drawImage(this.canvas, 0, 0, this.canvasWidth, this.canvasHeight);
