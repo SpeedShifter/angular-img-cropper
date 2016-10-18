@@ -381,16 +381,16 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     this.currentlyInteracting = false;
 
                     angular.element(window)
-                      .off('mousemove.angular-img-cropper mouseup.angular-img-cropper touchmove.angular-img-cropper touchend.angular-img-cropper')
-                      .on('mousemove.angular-img-cropper', this.onMouseMove.bind(this))
-                      .on('mouseup.angular-img-cropper', this.onMouseUp.bind(this))
-                      .on('touchmove.angular-img-cropper', this.onTouchMove.bind(this))
-                      .on('touchend.angular-img-cropper', this.onTouchEnd.bind(this));
+                        .off('mousemove.angular-img-cropper mouseup.angular-img-cropper touchmove.angular-img-cropper touchend.angular-img-cropper')
+                        .on('mousemove.angular-img-cropper', this.onMouseMove.bind(this))
+                        .on('mouseup.angular-img-cropper', this.onMouseUp.bind(this))
+                        .on('touchmove.angular-img-cropper', this.onTouchMove.bind(this))
+                        .on('touchend.angular-img-cropper', this.onTouchEnd.bind(this));
 
                     angular.element(canvas)
-                      .off('mousedown.angular-img-cropper touchstart.angular-img-cropper')
-                      .on('mousedown.angular-img-cropper', this.onMouseDown.bind(this))
-                      .on('touchstart.angular-img-cropper', this.onTouchStart.bind(this));
+                        .off('mousedown.angular-img-cropper touchstart.angular-img-cropper')
+                        .on('mousedown.angular-img-cropper', this.onMouseDown.bind(this))
+                        .on('touchstart.angular-img-cropper', this.onTouchStart.bind(this));
                 }
 
                 ImageCropper.prototype.resizeCanvas = function (width, height) {
@@ -917,46 +917,46 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                         brPos = PointPool.instance.borrow(cX + imageW / 2, cY - cropH / 2);
                     }
 
-                        this.tl.setPosition(tlPos.x, tlPos.y);
-                        this.tr.setPosition(trPos.x, trPos.y);
-                        this.bl.setPosition(blPos.x, blPos.y);
-                        this.br.setPosition(brPos.x, brPos.y);
-                        PointPool.instance.returnPoint(tlPos);
-                        PointPool.instance.returnPoint(trPos);
-                        PointPool.instance.returnPoint(blPos);
-                        PointPool.instance.returnPoint(brPos);
+                    this.tl.setPosition(tlPos.x, tlPos.y);
+                    this.tr.setPosition(trPos.x, trPos.y);
+                    this.bl.setPosition(blPos.x, blPos.y);
+                    this.br.setPosition(brPos.x, brPos.y);
+                    PointPool.instance.returnPoint(tlPos);
+                    PointPool.instance.returnPoint(trPos);
+                    PointPool.instance.returnPoint(blPos);
+                    PointPool.instance.returnPoint(brPos);
 
-                    if(scope.cropAreaBounds
+                    /*if(scope.cropAreaBounds
                         && scope.cropAreaBounds.left !== undefined
                         && scope.cropAreaBounds.top !== undefined
                         && scope.cropAreaBounds.right !== undefined
                         && scope.cropAreaBounds.bottom !== undefined) {
 
-                      var canvasAspect = this.canvasHeight / this.canvasWidth;
-                      if (canvasAspect > sourceAspect) {
-                        w = this.canvasWidth;
-                        h = this.canvasWidth * sourceAspect;
-                      } else {
-                        h = this.canvasHeight;
-                        w = this.canvasHeight / sourceAspect;
-                      }
-                      this.ratioW = w / this.srcImage.width;
-                      this.ratioH = h / this.srcImage.height;
+                        var canvasAspect = this.canvasHeight / this.canvasWidth;
+                        if (canvasAspect > sourceAspect) {
+                            w = this.canvasWidth;
+                            h = this.canvasWidth * sourceAspect;
+                        } else {
+                            h = this.canvasHeight;
+                            w = this.canvasHeight / sourceAspect;
+                        }
+                        this.ratioW = w / this.srcImage.width;
+                        this.ratioH = h / this.srcImage.height;
 
-                      var bounds = new Bounds();
-                      bounds.top = Math.round(h + this.minYClamp - this.ratioH*scope.cropAreaBounds.top);
-                      bounds.bottom = Math.round(h + this.minYClamp - this.ratioH*scope.cropAreaBounds.bottom);
-                      bounds.left = Math.round(this.ratioW*scope.cropAreaBounds.left + this.minXClamp);
-                      bounds.right = Math.round(this.ratioW*scope.cropAreaBounds.right + this.minXClamp);
+                        var bounds = new Bounds();
+                        bounds.top = Math.round(h + this.minYClamp - this.ratioH*scope.cropAreaBounds.top);
+                        bounds.bottom = Math.round(h + this.minYClamp - this.ratioH*scope.cropAreaBounds.bottom);
+                        bounds.left = Math.round(this.ratioW*scope.cropAreaBounds.left + this.minXClamp);
+                        bounds.right = Math.round(this.ratioW*scope.cropAreaBounds.right + this.minXClamp);
 
-                      this.tl.setPosition(bounds.left, bounds.top);
-                      this.tr.setPosition(bounds.right, bounds.top);
-                      this.bl.setPosition(bounds.left, bounds.bottom);
-                      this.br.setPosition(bounds.right, bounds.bottom);
+                        this.tl.setPosition(bounds.left, bounds.top);
+                        this.tr.setPosition(bounds.right, bounds.top);
+                        this.bl.setPosition(bounds.left, bounds.bottom);
+                        this.br.setPosition(bounds.right, bounds.bottom);
 
-                      this.center.setPosition(bounds.left+bounds.getWidth()/2, bounds.top+bounds.getHeight()/2);
-                    }
-
+                        this.center.setPosition(bounds.left+bounds.getWidth()/2, bounds.top+bounds.getHeight()/2);
+                    }*/
+                    
                     this.vertSquashRatio = this.detectVerticalSquash(this.srcImage);
                     this.draw(this.ctx);
                     var croppedImg = this.getCroppedImage(scope.cropWidth, scope.cropHeight);
@@ -1227,6 +1227,8 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     ctx.drawImage(img, sx * this.vertSquashRatio, sy * this.vertSquashRatio, sw * this.vertSquashRatio, sh * this.vertSquashRatio, dx, dy, dw, dh);
                 };
                 ImageCropper.prototype.detectVerticalSquash = function (img) {
+                    // solution doesn't work with transparent icons, which is pretty often for desktop clients
+                    return 1;
                     var iw = img.naturalWidth, ih = img.naturalHeight;
                     var canvas = document.createElement('canvas');
                     canvas.width = 1;
