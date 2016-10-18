@@ -392,29 +392,29 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     this.currentlyInteracting = false;
 
                     angular.element(canvas)
-                        .off('mousedown.drooms touchstart.drooms')
-                        .on('mousedown.drooms', this.onMouseDown.bind(this))
-                        .on('mousemove.drooms', this.onMouseMove.bind(this))
-                        .on('touchstart.drooms', this.onTouchStart.bind(this));
+                        .off('mousedown.imgcropper touchstart.imgcropper')
+                        .on('mousedown.imgcropper', this.onMouseDown.bind(this))
+                        .on('mousemove.imgcropper', this.onMouseMove.bind(this))
+                        .on('touchstart.imgcropper', this.onTouchStart.bind(this));
                 }
 
                 ImageCropper.prototype.onWindowEvents = function () {
-                    angular.element(this.canvas).off('mousemove.drooms');
+                    angular.element(this.canvas).off('mousemove.imgcropper');
                     angular.element(window)
-                        .off('mousemove.drooms mouseup.drooms touchmove.drooms touchend.drooms')
-                        .on('mousemove.drooms', this.onMouseMove.bind(this))
-                        .on('mouseup.drooms', this.onMouseUp.bind(this))
-                        .on('touchmove.drooms', this.onTouchMove.bind(this))
-                        .on('touchend.drooms', this.onTouchEnd.bind(this));
+                        .off('mousemove.imgcropper mouseup.imgcropper touchmove.imgcropper touchend.imgcropper')
+                        .on('mousemove.imgcropper', this.onMouseMove.bind(this))
+                        .on('mouseup.imgcropper', this.onMouseUp.bind(this))
+                        .on('touchmove.imgcropper', this.onTouchMove.bind(this))
+                        .on('touchend.imgcropper', this.onTouchEnd.bind(this));
                 };
 
                 ImageCropper.prototype.offWindowEvents = function () {
                     imageCropperDataShare.setStyle(this.canvas, 'initial');
 
                     angular.element(this.canvas)
-                        .on('mousemove.drooms', this.onMouseMove.bind(this));
+                        .on('mousemove.imgcropper', this.onMouseMove.bind(this));
                     angular.element(window)
-                        .off('mousemove.drooms mouseup.drooms touchmove.drooms touchend.drooms');
+                        .off('mousemove.imgcropper mouseup.imgcropper touchmove.imgcropper touchend.imgcropper');
                 };
 
                 ImageCropper.prototype.resizeCanvas = function (width, height) {
@@ -427,6 +427,8 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                 ImageCropper.prototype.draw = function (ctx) {
                     var bounds = this.getBounds();
                     if (this.srcImage) {
+                        var bufferedCtx = this.buffer.getContext('2d');
+                        bufferedCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
                         ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
                         var sourceAspect = this.srcImage.height / this.srcImage.width;
                         var canvasAspect = this.canvasHeight / this.canvasWidth;
@@ -442,19 +444,23 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                         }
                         this.ratioW = w / this.srcImage.width;
                         this.ratioH = h / this.srcImage.height;
-                        ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+                        ctx.fillStyle = "rgba(255, 255, 255, 1)";
 
                         if (canvasAspect < sourceAspect) {
                             ctx.fillRect(this.buffer.width / 2 - w / 2, 0, w, h);
-                            this.drawImageIOSFix(ctx, this.srcImage, 0, 0, this.srcImage.width, this.srcImage.height, this.buffer.width / 2 - w / 2, 0, w, h);
+                            this.drawImageIOSFix(bufferedCtx, this.srcImage, 0, 0, this.srcImage.width, this.srcImage.height, this.buffer.width / 2 - w / 2, 0, w, h);
                         }
                         else {
                             ctx.fillRect(0, this.buffer.height / 2 - h / 2, w, h);
-                            this.drawImageIOSFix(ctx, this.srcImage, 0, 0, this.srcImage.width, this.srcImage.height, 0, this.buffer.height / 2 - h / 2, w, h);
+                            this.drawImageIOSFix(bufferedCtx, this.srcImage, 0, 0, this.srcImage.width, this.srcImage.height, 0, this.buffer.height / 2 - h / 2, w, h);
                         }
-                        this.buffer.getContext('2d').drawImage(this.canvas, 0, 0, this.canvasWidth, this.canvasHeight);
+                        ctx.drawImage(this.buffer, 0, 0, this.canvasWidth, this.canvasHeight);
+
                         ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
                         ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+                        ctx.fillStyle = "rgba(255, 255, 255, 1)";
+                        ctx.fillRect(bounds.left, bounds.top, bounds.getWidth(), bounds.getHeight());
+
                         ctx.drawImage(this.buffer, bounds.left, bounds.top, Math.max(bounds.getWidth(), 1), Math.max(bounds.getHeight(), 1), bounds.left, bounds.top, bounds.getWidth(), bounds.getHeight());
                         var marker;
                         for (var i = 0; i < this.markers.length; i++) {
@@ -990,6 +996,10 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     else {
                         this.cropCanvas.width = Math.max(bounds.getWidth(), 1);
                         this.cropCanvas.height = Math.max(bounds.getHeight(), 1);
+                        // bufferedCtx = this.buffer.getContext('2d');
+                        // bufferedCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+                        // this.drawImageIOSFix(this.buffer.getContext('2d'), this.srcImage, Math.max(Math.round((bounds.left) / this.ratioW - offsetW), 0), Math.max(Math.round(bounds.top / this.ratioH - offsetH), 0), Math.max(Math.round(bounds.getWidth() / this.ratioW), 1), Math.max(Math.round(bounds.getHeight() / this.ratioH), 1), 0, 0, fillWidth, fillHeight);
+
                         this.cropCanvas.getContext('2d').drawImage(this.buffer, bounds.left, bounds.top, Math.max(bounds.getWidth(), 1), Math.max(bounds.getHeight(), 1), 0, 0, bounds.getWidth(), bounds.getHeight());
                         this.croppedImage.width = this.cropCanvas.width;
                         this.croppedImage.height = this.cropCanvas.height;
