@@ -944,6 +944,9 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     PointPool.instance.returnPoint(brPos);
 
                     this.vertSquashRatio = this.detectVerticalSquash(this.srcImage);
+                    this.aspectRatio = cropAspect;
+                    this.draw(this.ctx);
+
                     var croppedImg = this.getCroppedImage(scope.cropWidth, scope.cropHeight);
                     if(attrs.croppedImage !== undefined) {
                         scope.croppedImage = croppedImg.src;
@@ -951,9 +954,6 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     if (scope.cropAreaBounds && this.imageSet) {
                         scope.cropAreaBounds = this.getCropBounds();
                     }
-                    this.aspectRatio = cropAspect;
-
-                    this.draw(this.ctx);
                 };
                 ImageCropper.prototype.getCroppedImage = function (fillWidth, fillHeight) {
                     var bounds = this.getBounds();
