@@ -8,7 +8,7 @@ An image cropping tool for AngularJS. Features a rectangular crop area. The crop
 
 ## Live demo
 
-[Live demo on JSBin](http://jsbin.com/fukeqe/9/)
+[Live demo on JSBin](http://jsbin.com/qitemedepu)
 
 ## Requirements
 
@@ -18,7 +18,7 @@ An image cropping tool for AngularJS. Features a rectangular crop area. The crop
 
 ### Download
 
-- [Download angular-img-cropper](https://github.com/AllanBishop/angular-img-cropper/archive/master.zip) files from GitHub.
+- [Download angular-img-cropper](https://github.com/SpeedShifter/angular-img-cropper/archive/v1.1.1.zip) files from GitHub.
 
 Or
 
@@ -50,6 +50,10 @@ angular.module('myApp', ['angular-img-cropper']);
 | crop-area-bounds (*optional*) | A model that will be automatically updated with the bounds (left, right, top, bottom) of the crop area relative to the original source image.
 | min-width (*optional*) | The minimum width that the crop area can be set to.
 | min-height (*optional*) | The minimum height that the crop area can be set to.
+| crop-color (*optional*) | Color of croping frame
+| crop-aspect (*optional*) | Initial crop aspect ration
+| min-aspect (*optional*) | Minimal allowed crop aspect ratio
+| max-aspect (*optional*) | Maximal allowed crop aspect ratio
 | cors (*optional*) |  Allows images loaded from foreign origins to be used in canvas as if they were being loaded from the current origin ([MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image)). *Default: no*
 
 ## Example usage
