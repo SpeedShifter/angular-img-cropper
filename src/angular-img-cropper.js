@@ -917,7 +917,7 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                     this.srcImage = img;
                     this.updateClampBounds();
                     var sourceAspect = this.srcImage.height / this.srcImage.width;
-                    
+
                     var cropAspect = this.cropAspect || sourceAspect;
                     if (scope.minAspect) {
                         cropAspect = Math.max(scope.minAspect, cropAspect);
@@ -1304,7 +1304,7 @@ angular.module('angular-img-cropper', []).directive("imageCropper", ['$document'
                 scope.cropColor = scope.cropColor ||  'rgba(255,228,0,1)';
 
                 crop = new ImageCropper(canvas, width ? canvas.width / 2 - width / 2 : 0, height ? canvas.height / 2 - height / 2 : 0, width || canvas.width, height || canvas.height, keepAspect, cropAspect, touchRadius);
-                
+
                 $(canvas).data('crop.angular-img-cropper', crop);
 
                 if(oldImage) {
@@ -1381,35 +1381,39 @@ angular.module('angular-img-cropper').directive('imgCropperFilereadCall', functi
     };
 });
 
-angular.module('angular-img-cropper').factory("imageCropperDataShare", function () {
+angular
+  .module('angular-img-cropper')
+  .factory("imageCropperDataShare", function () {
     var share = {};
     var pressed;
     var over;
+
     share.setPressed = function (canvas) {
-        pressed = canvas;
+      pressed = canvas;
     };
 
     share.setReleased = function (canvas) {
-        if (canvas === pressed) {
-            pressed = undefined;
-        }
+      if (canvas === pressed) {
+          pressed = undefined;
+      }
     };
 
     share.setOver = function (canvas) {
-        over = canvas;
+      over = canvas;
     };
 
     share.setStyle = function (canvas, style) {
-        if (pressed !== undefined) {
-            if (pressed === canvas) {
-                angular.element(document.documentElement).css('cursor', style);
-            }
+      if (pressed !== undefined) {
+        if (pressed === canvas) {
+          angular.element(document.documentElement).css('cursor', style);
         }
-        else {
-            if (canvas === over) {
-                angular.element(document.documentElement).css('cursor', style);
-            }
+      }
+      else {
+        if (canvas === over) {
+          angular.element(document.documentElement).css('cursor', style);
         }
+      }
     };
+
     return share;
-});
+  });
