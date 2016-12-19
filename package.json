@@ -2,7 +2,9 @@
   "name": "angular-img-cropper",
   "version": "1.1.1",
   "description": "Client side image cropper directive for AngularJS (rectangular area, aspect ratio, multi-touch)",
-  "scripts": {},
+  "scripts": {
+    "dev": "http-server example/"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:IzumiSy/angular-img-cropper.git"
