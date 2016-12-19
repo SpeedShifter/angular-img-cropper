@@ -35,7 +35,8 @@
     "grunt-contrib-uglify": "0.2.0",
     "grunt-contrib-watch": "^0.6.1",
     "install": "^0.1.8",
-    "uglifyjs": "^2.4.10"
+    "uglifyjs": "^2.4.10",
+    "watch": "^1.0.1"
   },
   "license": "MIT"
 }
