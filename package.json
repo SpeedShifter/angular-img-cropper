@@ -3,7 +3,8 @@
   "version": "1.1.1",
   "description": "Client side image cropper directive for AngularJS (rectangular area, aspect ratio, multi-touch)",
   "scripts": {
-    "dev": "http-server example/"
+    "dev": "http-server example/",
+    "jslint": "jslint src/* || true"
   },
   "repository": {
     "type": "git",
