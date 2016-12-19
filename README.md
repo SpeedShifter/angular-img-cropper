@@ -97,6 +97,22 @@ angular.module('myApp', ['angular-img-cropper']);
 </html>
 ```
 
+## Development
+### Setup
+```sh
+$ npm install
+```
+### Linter
+```sh
+$ npm run jslint
+```
+### Build
+```sh
+$ npm run build
+```
+
+## Contribution
+PRs accpeted.
 
 ## License
 
