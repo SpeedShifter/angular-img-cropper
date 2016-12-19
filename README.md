@@ -111,9 +111,9 @@ $ npm run jslint
 ```sh
 $ npm run build
 ```
-### Run an example
+### Run locally
 ```sh
-$ npm run example
+$ npm run dev
 ```
 
 ## Contribution
