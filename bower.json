@@ -11,9 +11,9 @@
     "angular",
     "cropper",
     "image",
-	"img",
+    "img",
     "rectangle",
-	"aspect",
+    "aspect",
     "crop"
   ],
   "license": "MIT",
@@ -21,10 +21,10 @@
     "node_modules",
     "src",
     "test",
-	"package.json",
-	"gruntfile.js",
-	".git",
-	".idea",
-	".txt"
+    "package.json",
+    "gruntfile.js",
+    ".git",
+    ".idea",
+    ".txt"
   ]
 }
