@@ -38,6 +38,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "http-server": "^0.9.0",
     "install": "^0.1.8",
+    "jslint": "^0.10.3",
     "uglifyjs": "^2.4.10",
     "watch": "^1.0.1"
   },
