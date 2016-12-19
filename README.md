@@ -1,6 +1,7 @@
 # angular-img-cropper
+> An image cropping tool module for AngularJS.
 
-An image cropping tool for AngularJS. Features a rectangular crop area. The crop area's aspect ratio can be enforced during dragging. The crop image can either be 1:1 or scaled to fit an area.
+Features a rectangular crop area. The crop area's aspect ratio can be enforced during dragging. The crop image can either be 1:1 or scaled to fit an area.
 
 ## Screenshot
 
@@ -109,6 +110,10 @@ $ npm run jslint
 ### Build
 ```sh
 $ npm run build
+```
+### Run an example
+```sh
+$ npm run example
 ```
 
 ## Contribution
