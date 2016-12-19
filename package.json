@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "npm run build && live-server example/",
     "build": "jslint src/* && npm run js:min",
-    "watch": "watch 'npm run js:min && npm run js:copy:dev' src/",
     "clean": "rm -rf dist/*",
     "jslint": "jslint src/* || true",
     "js:min": "uglifyjs src/angular-img-cropper.js > dist/angular-img-cropper.min.js",
@@ -37,11 +36,9 @@
     "crop"
   ],
   "devDependencies": {
-    "concurrently": "^3.1.0",
     "jslint": "^0.10.3",
     "live-server": "^1.1.0",
     "uglifyjs": "^2.4.10",
-    "watch": "^1.0.1"
   },
   "license": "MIT"
 }
