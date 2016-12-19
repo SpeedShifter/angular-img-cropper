@@ -4,9 +4,9 @@
   "description": "Client side image cropper directive for AngularJS (rectangular area, aspect ratio, multi-touch)",
   "scripts": {
     "dev": "http-server example/",
+    "build": "jslint src/* && npm run js:min",
     "jslint": "jslint src/* || true",
-    "js:bundle": "browserify src/angular-img-cropper.js > dist/angular-img-cropper.js",
-    "js:min": "uglifyjs dist/angular-img-cropper.js > dist/angular-img-cropper.min.js"
+    "js:min": "uglifyjs src/angular-img-cropper.js > dist/angular-img-cropper.min.js"
   },
   "repository": {
     "type": "git",
